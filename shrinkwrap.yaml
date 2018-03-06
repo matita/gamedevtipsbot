@@ -1,6 +1,7 @@
 dependencies:
   discord.js: 11.3.2
   express: 4.16.2
+  nedb: 1.8.0
 packages:
   /accepts/1.3.5:
     dependencies:
@@ -19,6 +20,16 @@ packages:
     dev: false
     resolution:
       integrity: sha512-jp/uFnooOiO+L211eZOoSyzpOITMXx1rBITauYykG3BRYPu8h0UcxsPNB04RR5vo4Tyz3+ay17tR6JVf9qzYWg==
+  /async/0.2.10:
+    dev: false
+    resolution:
+      integrity: sha1-trvgsGdLnXGXCMo43owjfLUmw9E=
+  /binary-search-tree/0.2.5:
+    dependencies:
+      underscore: 1.4.4
+    dev: false
+    resolution:
+      integrity: sha1-fbs7IQ/coIJFDa0jNMMErzm9x4Q=
   /body-parser/1.18.2:
     dependencies:
       bytes: 3.0.0
@@ -206,6 +217,10 @@ packages:
       node: '>=0.10.0'
     resolution:
       integrity: sha512-oTZqweIP51xaGPI4uPa56/Pri/480R+mo7SeU+YETByQNhDG55ycFyNLIgta9vXhILrxXDmF7ZGhqZIcuN0gJQ==
+  /immediate/3.0.6:
+    dev: false
+    resolution:
+      integrity: sha1-nbHb0Pr43m++D13V5Wu2BigN5ps=
   /inherits/2.0.3:
     dev: false
     resolution:
@@ -216,6 +231,18 @@ packages:
       node: '>= 0.10'
     resolution:
       integrity: sha1-4/o1e3c9phnybpXwSdBVxyeW+Gs=
+  /lie/3.1.1:
+    dependencies:
+      immediate: 3.0.6
+    dev: false
+    resolution:
+      integrity: sha1-mkNrLMd0bKWd56QfpGmz77dr2H4=
+  /localforage/1.6.0:
+    dependencies:
+      lie: 3.1.1
+    dev: false
+    resolution:
+      integrity: sha1-iwBZvus4dcSBJChsp/2/I9UrjJc=
   /long/4.0.0:
     dev: false
     resolution:
@@ -254,10 +281,30 @@ packages:
     dev: false
     resolution:
       integrity: sha512-KI1+qOZu5DcW6wayYHSzR/tXKCDC5Om4s1z2QJjDULzLcmf3DvzS7oluY4HCTrc+9FiKmWUgeNLg7W3uIQvxtQ==
+  /minimist/0.0.8:
+    dev: false
+    resolution:
+      integrity: sha1-hX/Kv8M5fSYluCKCYuhqp6ARsF0=
+  /mkdirp/0.5.1:
+    dependencies:
+      minimist: 0.0.8
+    dev: false
+    resolution:
+      integrity: sha1-MAV0OOrGz3+MR2fzhkjWaX11yQM=
   /ms/2.0.0:
     dev: false
     resolution:
       integrity: sha1-VgiurfwAvmwpAd9fmGF4jeDVl8g=
+  /nedb/1.8.0:
+    dependencies:
+      async: 0.2.10
+      binary-search-tree: 0.2.5
+      localforage: 1.6.0
+      mkdirp: 0.5.1
+      underscore: 1.4.4
+    dev: false
+    resolution:
+      integrity: sha1-DjUCzYLABNU1WkPJ5VV3vXvZHYg=
   /negotiator/0.6.1:
     dev: false
     engines:
@@ -390,6 +437,10 @@ packages:
       node: '>= 0.6'
     resolution:
       integrity: sha512-HRkVv/5qY2G6I8iab9cI7v1bOIdhm94dVjQCPFElW9W+3GeDOSHmy2EBYe4VTApuzolPcmgFTN3ftVJRKR2J9Q==
+  /underscore/1.4.4:
+    dev: false
+    resolution:
+      integrity: sha1-YaajIBBiKvoHljvzJSA88SI51gQ=
   /unpipe/1.0.0:
     dev: false
     engines:
@@ -421,3 +472,4 @@ shrinkwrapVersion: 3
 specifiers:
   discord.js: ^11.3.2
   express: ^4.16.2
+  nedb: ^1.8.0
