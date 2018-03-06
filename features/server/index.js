@@ -17,7 +17,7 @@ app.get("/", function (request, response) {
 });
 
 app.get('/discord', (req, res) => {
-  res.send('<a href="https://discordapp.com/oauth2/authorize?client_id=' + process.env.DISCORD_CLIENT_ID + '">Invite bot to server</a>')
+  res.send('<a href="https://discordapp.com/oauth2/authorize?scope=bot&client_id=' + process.env.DISCORD_CLIENT_ID + '">Invite bot to server</a>')
 })
 
 app.get("/dreams", function (request, response) {
