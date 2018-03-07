@@ -35,9 +35,16 @@ client.on('message', function (message) {
     return;
   
   const text = stripMention(client.user.id)(message.content)
-    
-  // reply to the message
-  message.reply('You said: ' + text);
+    .trim()
+  
+  const textParts = text.split(/\s+/)
+  const commandName = textParts.length && textParts[0].toLowerCase()
+  const command = commands[commandName]
+  
+  if (command)
+    command(message, textParts.slice(1).join(' '))
+  else
+    message.reply('You said: ' + text);
 });
 // make the bot log in
 client.login(process.env.DISCORD_BOT_TOKEN);

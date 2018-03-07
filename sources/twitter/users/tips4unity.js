@@ -5,7 +5,7 @@ const userId = '2490064238'
 
 const init = twit => {
   console.log('Retrieveing tweets for ' + userId, __filename)
-  twit.get('statuses/user_timeline', { user_id: userId, count: 200, tweet_mode: 'extended' }, (err, tweets, res) => {
+  twit.get('statuses/user_timeline', { user_id: userId, tweet_mode: 'extended' }, (err, tweets, res) => {
     if (err)
       return console.error(err)
 

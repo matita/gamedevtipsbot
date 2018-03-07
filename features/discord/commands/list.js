@@ -1,3 +1,10 @@
+const tips = require('../../../models/tips')
+
 module.exports = (message, text) => {
-  message.reply('result of list: <none>')
+  tips.find({})
+    .sort({ createdAt: 1 })
+    .limit(10)
+    .exec((err, foundTips) => {
+      if
+    });
 }
