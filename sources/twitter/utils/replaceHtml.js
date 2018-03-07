@@ -1,5 +1,5 @@
 module.exports = text => text
-  .replace('&lt;', '<')
-  .replace('&gt;', '>')
-  .replace('&amp;', '&')
+  .replace(/&lt;/g, '<')
+  .replace(/&gt;/g, '>')
+  .replace(/&amp;/g, '&')
   
