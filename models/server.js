@@ -3,7 +3,7 @@ const serversDb = require('./servers')
 const serverFactory = server => ({
   ...server,
   
-  setChannel: (channelId) => {
+  setDefaultChannel: (channelId) => {
     server.defaultChannelId = channelId
     return new Promise((resolve, reject) => {
       serversDb.update({ _id: server._id }, server, (err, numUpdated) => {
