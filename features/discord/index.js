@@ -12,8 +12,8 @@ client.on('ready', function () {
   console.log('Beep boop');
 });
 
+// retrieve available commands
 const commands = {}
-
 const commandsDir = path.resolve(__dirname, 'commands')
 fs.readdir(commandsDir, (err, files) => {
   if (err)
@@ -46,5 +46,6 @@ client.on('message', function (message) {
   else
     message.reply('You said: ' + text);
 });
+
 // make the bot log in
 client.login(process.env.DISCORD_BOT_TOKEN);
