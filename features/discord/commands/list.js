@@ -1,5 +1,5 @@
 const tips = require('../../../models/tips')
-const textInChunks = (text, chunkLength) => text.match(new RegExp('.{1,' + chunkLength + '}', 'g'))
+const textInChunks = (text, chunkLength) => text.match(new RegExp('(.|\n){1,' + chunkLength + '}', 'gm'))
 
 module.exports = (message, text) => {
   const countMatch = text.match(/\b(\d+)\b/)
