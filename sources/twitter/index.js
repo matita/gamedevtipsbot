@@ -19,7 +19,7 @@ fs.readdir(usersDir, (err, files) => {
   
   // put users in a dictionary
   const usersDict = users.reduce((d, u) => {
-    d[u.id] = u
+    d[u.userId] = u
     return d
   }, {})
   
@@ -27,10 +27,20 @@ fs.readdir(usersDir, (err, files) => {
   users.forEach(u => u.init(twit))
   
   // follow users stream
-  const usersIds = users.map(u => u.id)
+  const usersIds = users.map(u => u.userId)
   const stream = twit.stream('statuses/filter', { follow: usersIds })
   stream.on('tweet', async incompleteTweet => {
+    const tweetAuthorId = incompleteTweet.user.id
+    const user = usersDict[tweetAuthorId]
+    
+    if (!user)
+      return
+    
     const tweetId = incompleteTweet.id_str
-    const tweetRes = await twit.get('statuses/show/' + tweetId, { include_entities: true, tweet_mode: 'extended'
+    const tweetRes = await twit.get('statuses/show/' + tweetId, { include_entities: true, tweet_mode: 'extended' })
+    const tweet = tweetRes.data
+    
+    // make the single user process the tweet
+    user.receivedTweet(tweet, twit)
   })
 })
