@@ -9,6 +9,7 @@ const init = twit => {
     if (err)
       return console.error(err)
 
+    console.log('retrieved', tweets.length, 'tweets for', userId, __filename)
     const newTips = tweets.map(tweet => tweetToTip({ tweet, source: 'tips4unity', tags: ['unity'] }))
     
     newTips.forEach(t => {
@@ -18,8 +19,8 @@ const init = twit => {
         
         if (upsert)
           console.log('inserted new tip ' + t._id)
-        else if (updatedCount != 0)
-          console.log('updated tip ' + t._id)
+        /*else if (updatedCount != 0)
+          console.log('updated tip ' + t._id)*/
       })
     })
   })
