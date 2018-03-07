@@ -1,6 +1,7 @@
 const fs = require('fs')
 const path = require('path')
 const stripMention = require('./utils/stripMention')
+const init = require('./init')
 
 const Discord = require('discord.js');
 const client = new Discord.Client();
@@ -10,6 +11,7 @@ console.log('Initializing the bot');
 // log something as soon as the bot is ready
 client.on('ready', function () {
   console.log('Beep boop');
+  init(client)
 });
 
 // retrieve available commands

@@ -20,7 +20,6 @@ const serverFactory = server => ({
 
 const getServer = (guildId) => new Promise((resolve, reject) => {
   serversDb.findOne({ _id: ''+guildId }).exec((err, s) => {
-    console.log('getServer findOne:', s)
     if (err) 
       reject(err)
     else if (s)

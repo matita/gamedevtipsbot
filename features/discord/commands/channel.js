@@ -3,7 +3,6 @@ const { getServer } = require('../../../models/server')
 module.exports = async (message, text) => {
   try {
     const server = await getServer(message.channel.guild.id)
-    message.channel.send(`server ${server._id} - guild: ${message.channel.guild.id}`)
     const channelId = server.defaultChannelId
     if (!channelId)
       return message.channel.send('No default channel set')
