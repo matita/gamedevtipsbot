@@ -1,8 +1,8 @@
 const serversDb = require('../../models/servers')
-const tipsDb = require('../../models/tips')
-const tipToEmbed = require('./utils/tipToEmbed')
+const randomTip = require('./utils/randomTip')
 
 module.exports = client => {
+  return;
   serversDb
     .find({ defaultChannelId: { $exists: true } })
     .exec((err, servers) => {
@@ -23,14 +23,7 @@ module.exports = client => {
           if (!channel)
             return
           
-          tipsDb.find({}).exec((err, allTips) => {
-            if (err)
-              return console.error('Error while searching for all tips')
-            
-            const index = Math.floor(Math.random() * allTips.length)
-            const tip = allTips[index]
-            channel.send({ embed: tipToEmbed(tip) })
-          })
+          randomTip(channel)
         })
       }, 10000)
     })

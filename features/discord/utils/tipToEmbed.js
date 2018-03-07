@@ -1,5 +1,5 @@
 module.exports = tip => ({
-  //title: tip.source,
+  title: tip.source,
   description: tip.text,
-  footer: { text: tip.source }
+  footer: { text: tip.tags.map(t => '#' + t).join(' ') }
 })
