@@ -1,3 +1,6 @@
+const tweetToTip = require('../utils/tweetToTip')
+const tips = require('../../../models/tips')
+
 const userId = '2490064238'
 
 const init = twit => {
@@ -6,8 +9,11 @@ const init = twit => {
     if (err)
       return console.error(err)
 
-    const episodes = tweets.map(toChallengeEpisode)
-    episodes.forEach(e => add('pixel_dailies', e))
+    const newTips = tweets.map(tweet => tweetToTip({ tweet, source: 'tips4unity' }))
+    
+    newTips.forEach(t => {
+      tips.update({ _id: t._id }, t, { upsert: true }, (err, updatedCount)
+    })
     
     console.log('filtered tweets', filteredTweets.map(/*t => t.text + ' ' + new Date(t.created_at)*/toChallengeEpisode))
   })
