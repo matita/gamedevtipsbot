@@ -9,6 +9,8 @@ const serverFactory = server => ({
       serversDb.update({ _id: server._id }, server, (err, numUpdated) => {
         if (err)
           return reject(err)
+        if (!numUpdated)
+          return reject(`No server updated with id ${server._id}`)
         resolve(serverFactory(server))
       })
     })
@@ -17,7 +19,8 @@ const serverFactory = server => ({
 })
 
 const getServer = (guildId) => new Promise((resolve, reject) => {
-  serversDb.findOne({ _id: guildId }).exec((err, s) => {
+  serversDb.findOne({ _id: ''+guildId }).exec((err, s) => {
+    console.log('getServer findOne:', s)
     if (err) 
       reject(err)
     else if (s)

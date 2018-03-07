@@ -5,4 +5,8 @@ const serversDb = new Datastore({
   autoload: true
 })
 
+serversDb.find({}).exec((err, ss) => {
+  console.log('current servers:\n', ss)
+})
+
 module.exports = serversDb
