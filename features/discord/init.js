@@ -1,5 +1,6 @@
 const serversDb = require('../../models/servers')
 const tipsDb = require('../../models/tips')
+const tipToEmbed = require('./utils/tipToEmbed')
 
 module.exports = client => {
   serversDb
@@ -10,6 +11,10 @@ module.exports = client => {
     
       let count = 5
       const i = setInterval(() => {
+        if (count <= 0)
+          return 
+        count--
+          
         servers.forEach(s => {
           const channelId = s.defaultChannelId
           if (!channelId)
@@ -24,7 +29,7 @@ module.exports = client => {
             
             const index = Math.floor(Math.random() * allTips.length)
             const tip = allTips[index]
-            
+            channel.send({ embed: tipToEmbed(tip) })
           })
         })
       }, 10000)
