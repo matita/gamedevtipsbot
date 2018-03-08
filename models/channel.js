@@ -2,17 +2,8 @@ const channelsDb = require('./channels')
 const tipsDb = require('./tips')
 
 const getTags = channel => channel.tags || []
-const addTagsQuery = ({ query, tags }) => ({
-  ...query,
-  tags: (tags.length ? { $in: })
-})
-const getTipsQuery = channel => {
-  const query = {}
-  const tags = getTags(channel)
-  if (tags.length)
-    query.tags = { $in: tags }
-  return query
-}
+const includeArrayCondition = ar => ar.length ? { $in: ar } : undefined
+const excludeArrayCondition = ar => ({ $nin: ar })
 
 const factory = channel => ({
   ...channel,
@@ -32,15 +23,18 @@ const factory = channel => ({
   
   getRandomUnsentTip: () => {
     return new Promise((resolve, reject) => {
-      const query = { _id: { $nin: channel.sentTipsIds }}
-      const tags = getTags(channel)
-      if (tags.length)
-        query.tags = { $in: tags }
-        
-      tipsDb.find(query).exec((err, unsentTips) => {
+      const remainingQuery = {
+        _id: excludeArrayCondition(channel.sentTipsIds),
+        tags: includeArrayCondition(getTags(channel))
+      }
+      
+      const totalQuery = { tags: includeArrayCondition(getTags(channel)) }
+      
+      tipsDb.find(remainingQuery).exec((err, unsentTips) => {
         if (err)
           return reject(err)
         
+        tipsDb.find(totalQuery).exec((err, totalCount))
         const index = Math.floor(Math.random() * unsentTips.length)
         const tip = unsentTips[index]
         resolve({ tip, remaining: unsentTips.length - 1 })
