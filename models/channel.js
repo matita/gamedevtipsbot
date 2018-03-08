@@ -30,14 +30,25 @@ const factory = channel => ({
       
       const totalQuery = { tags: includeArrayCondition(getTags(channel)) }
       
+      console.log('remainingQuery', remainingQuery)
+      
       tipsDb.find(remainingQuery).exec((err, unsentTips) => {
         if (err)
           return reject(err)
         
-        tipsDb.find(totalQuery).exec((err, totalCount))
-        const index = Math.floor(Math.random() * unsentTips.length)
-        const tip = unsentTips[index]
-        resolve({ tip, remaining: unsentTips.length - 1 })
+        tipsDb.find(totalQuery).exec((err, total) => {
+          if (err) 
+            return reject(err)
+          const index = Math.floor(Math.random() * unsentTips.length)
+          const tip = unsentTips[index]
+          const remaining = unsentTips.length - 1
+          resolve({ 
+            tip, 
+            remaining,
+            total,
+            current: total - remaining
+          })
+        })
       })
     })
   },
