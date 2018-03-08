@@ -34,21 +34,27 @@ const factory = channel => ({
         _id: excludeArrayCondition(channel.sentTipsIds)
       }
       
-      tipsDb.find(remainingQuery).exec((err, unsentTips) => {
+      tipsDb.count(remainingQuery).exec((err, unsentTipsCount) => {
         if (err)
           return reject(err)
         
         tipsDb.count(totalQuery).exec((err, total) => {
           if (err) 
             return reject(err)
-          const index = Math.floor(Math.random() * unsentTips.length)
-          const tip = unsentTips[index]
-          const remaining = unsentTips.length - 1
-          resolve({ 
-            tip, 
-            remaining,
-            total,
-            current: total - remaining
+          
+          const index = Math.floor(Math.random() * unsentTipsCount)
+          const remaining = unsentTipsCount - 1
+          
+          tipsDb.findOne(remainingQuery).exec((err, tip) => {
+            if (err)
+              return reject(err)
+            
+            resolve({ 
+              tip, 
+              remaining,
+              total,
+              current: total - remaining
+            })
           })
         })
       })
