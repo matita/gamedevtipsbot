@@ -25,7 +25,7 @@ const factory = channel => ({
         return resolve(factory(channel));
 
       channel.sentTipsIds.push(tip._id)
-      channelsDb.update({ _id: channel._id }, channel).exec((err, c) => {
+      channelsDb.update({ _id: channel._id }, channel, (err, c) => {
         if (err) reject(err)
         else resolve(factory(c))
       })
@@ -36,11 +36,11 @@ const factory = channel => ({
 const getChannel = channelId => new Promise((resolve, reject) => {
   channelsDb.findOne({ _id: channelId }).exec((err, channel) => {
     if (err) reject(err)
-    else if (channel) resolve(channel)
+    else if (channel) resolve(factory(channel))
     else
-      channelsDb.insert({ _id: channelId, sentTipsIds: [] }).exec((err, channel) => {
+      channelsDb.insert({ _id: channelId, sentTipsIds: [] }, (err, channel) => {
         if (err) reject(err)
-        else resolve(channel)
+        else resolve(factory(channel))
       })
   })
 })

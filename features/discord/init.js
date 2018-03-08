@@ -23,12 +23,12 @@ const sendTips = (client) => {
         if (!channel || !discordChannel)
           return
           
-        randomTip(channel, discordChannel)
+        randomTip({ channel, discordChannel })
       })
     })
 }
 
 module.exports = client => {
-  const job = schedule.scheduleJob('0 */5 * * * *', sendTips.bind(null, client))
+  const job = schedule.scheduleJob('0 10 * * * *', sendTips.bind(null, client))
   console.log('scheduled job ' + new Date())
 }

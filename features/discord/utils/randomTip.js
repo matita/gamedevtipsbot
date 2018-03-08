@@ -1,14 +1,6 @@
-const tipsDb = require('../../../models/tips')
 const tipToEmbed = require('./tipToEmbed')
+const sendTip = require('./sendTip')
 
 module.exports = ({ channel, discordChannel }) => 
-  {
-  tipsDb.find({}).exec((err, allTips) => {
-    if (err)
-      return console.error('Error while searching for all tips')
-
-    const index = Math.floor(Math.random() * allTips.length)
-    const tip = allTips[index]
-    channel.send({ embed: tipToEmbed(tip) })
-  })
-}
+  channel.getRandomUnsentTip()
+    .then(({ tip, remaining }) => sendTip({ channel, discordChannel, tip, text: `Random tip, still ${remaining} to go` }))
