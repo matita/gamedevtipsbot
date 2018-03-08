@@ -23,17 +23,16 @@ const factory = channel => ({
   
   getRandomUnsentTip: () => {
     return new Promise((resolve, reject) => {
-      const remainingQuery = {
-        _id: excludeArrayCondition(channel.sentTipsIds)
-      }
+      const totalQuery = {}
       
       const tags = getTags(channel)
-      if (tags.length)
-        remainingQuery.tags = { $in: tags }
+      if (tags)
+        totalQuery.tags = { $in: tags }
       
-      const totalQuery = { tags: includeArrayCondition(getTags(channel)) }
-      
-      console.log('remainingQuery', remainingQuery)
+      const remainingQuery = {
+        ...totalQuery,
+        _id: excludeArrayCondition(channel.sentTipsIds)
+      }
       
       tipsDb.find(remainingQuery).exec((err, unsentTips) => {
         if (err)
