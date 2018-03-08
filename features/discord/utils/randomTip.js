@@ -1,7 +1,8 @@
 const tipsDb = require('../../../models/tips')
 const tipToEmbed = require('./tipToEmbed')
 
-module.exports = channel => {
+module.exports = ({ channel, discordChannel }) => 
+  {
   tipsDb.find({}).exec((err, allTips) => {
     if (err)
       return console.error('Error while searching for all tips')

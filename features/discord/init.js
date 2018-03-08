@@ -1,5 +1,6 @@
 const schedule = require('node-schedule')
 const serversDb = require('../../models/servers')
+const { getChannel } = require('../../models/channel')
 const randomTip = require('./utils/randomTip')
 
 const sendTips = (client) => {
@@ -11,15 +12,18 @@ const sendTips = (client) => {
     
       console.log('running scheduled job')
     
-      servers.forEach(s => {
+      servers.forEach(async s => {
         const channelId = s.defaultChannelId
         if (!channelId)
           return
-        const channel = client.channels.get(channelId)
-        if (!channel)
+        
+        const channel = await getChannel(channelId)
+        const discordChannel = client.channels.get(channelId)
+        
+        if (!channel || !discordChannel)
           return
           
-        randomTip(channel)
+        randomTip(channel, discordChannel)
       })
     })
 }
