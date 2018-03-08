@@ -11,7 +11,7 @@ const factory = channel => ({
   //sentTipsIds: channel.sentTipsIds || [],
   //tags: channel.tags || [],
   
-  addTags: (...tags) => {
+  setTags: (...tags) => {
     return new Promise((resolve, reject) => {
       channel.tags = getTags(channel).concat(tags)
       channelsDb.update({ _id: channel._id }, channel, (err, newChannel) => {
