@@ -26,7 +26,7 @@ const factory = channel => ({
       const totalQuery = {}
       
       const tags = getTags(channel)
-      if (tags)
+      if (tags.length)
         totalQuery.tags = { $in: tags }
       
       const remainingQuery = {
@@ -38,7 +38,7 @@ const factory = channel => ({
         if (err)
           return reject(err)
         
-        tipsDb.find(totalQuery).exec((err, total) => {
+        tipsDb.count(totalQuery).exec((err, total) => {
           if (err) 
             return reject(err)
           const index = Math.floor(Math.random() * unsentTips.length)
