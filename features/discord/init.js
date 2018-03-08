@@ -2,12 +2,14 @@ const schedule = require('node-schedule')
 const serversDb = require('../../models/servers')
 const randomTip = require('./utils/randomTip')
 
-const sendTips = () => {
+const sendTips = (client) => {
   serversDb
     .find({ defaultChannelId: { $exists: true } })
     .exec((err, servers) => {
       if (err)
         return console.error('Error while getting registered servers', err)
+    
+      console.log('running scheduled job')
     
       servers.forEach(s => {
         const channelId = s.defaultChannelId
@@ -23,5 +25,6 @@ const sendTips = () => {
 }
 
 module.exports = client => {
-  const job = schedule.scheduleJob('30 * * * *', sendTips)
+  const job = schedule.scheduleJob('*/30 * * * * *', sendTips.bind(null, client))
+  console.log('scheduled job ' + new Date())
 }
