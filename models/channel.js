@@ -4,7 +4,18 @@ const tipsDb = require('./tips')
 const factory = channel => ({
   ...channel,
   
-  sentTipsIds: channel.sentTipsIds || [],
+  //sentTipsIds: channel.sentTipsIds || [],
+  //tags: channel.tags || [],
+  
+  addTags: (...tags) => {
+    return new Promise((resolve, reject) => {
+      channel.tags = (channel.tags || []).concat(tags)
+      channelsDb.update({ _id: channel._id }, channel, (err, newChannel) => {
+        if (err) reject(err)
+        else resolve(factory(newChannel))
+      })
+    })
+  },
   
   getRandomUnsentTip: () => {
     return new Promise((resolve, reject) => {
@@ -38,7 +49,7 @@ const getChannel = channelId => new Promise((resolve, reject) => {
     if (err) reject(err)
     else if (channel) resolve(factory(channel))
     else
-      channelsDb.insert({ _id: channelId, sentTipsIds: [] }, (err, channel) => {
+      channelsDb.insert({ _id: channelId, sentTipsIds: [], tags: [] }, (err, channel) => {
         if (err) reject(err)
         else resolve(factory(channel))
       })
