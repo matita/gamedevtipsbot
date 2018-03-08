@@ -25,6 +25,6 @@ const sendTips = (client) => {
 }
 
 module.exports = client => {
-  const job = schedule.scheduleJob('*/30 * * * * *', sendTips.bind(null, client))
+  const job = schedule.scheduleJob('0 */5 * * * *', sendTips.bind(null, client))
   console.log('scheduled job ' + new Date())
 }
