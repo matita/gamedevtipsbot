@@ -1,6 +1,19 @@
 const channelsDb = require('./channels')
 const tipsDb = require('./tips')
 
+const getTags = channel => channel.tags || []
+const addTagsQuery = ({ query, tags }) => ({
+  ...query,
+  tags: (tags.length ? { $in: })
+})
+const getTipsQuery = channel => {
+  const query = {}
+  const tags = getTags(channel)
+  if (tags.length)
+    query.tags = { $in: tags }
+  return query
+}
+
 const factory = channel => ({
   ...channel,
   
@@ -9,7 +22,7 @@ const factory = channel => ({
   
   addTags: (...tags) => {
     return new Promise((resolve, reject) => {
-      channel.tags = (channel.tags || []).concat(tags)
+      channel.tags = getTags(channel).concat(tags)
       channelsDb.update({ _id: channel._id }, channel, (err, newChannel) => {
         if (err) reject(err)
         else resolve(factory(newChannel))
@@ -19,7 +32,12 @@ const factory = channel => ({
   
   getRandomUnsentTip: () => {
     return new Promise((resolve, reject) => {
-      tipsDb.find({ _id: { $nin: channel.sentTipsIds }}).exec((err, unsentTips) => {
+      const query = { _id: { $nin: channel.sentTipsIds }}
+      const tags = getTags(channel)
+      if (tags.length)
+        query.tags = { $in: tags }
+        
+      tipsDb.find(query).exec((err, unsentTips) => {
         if (err)
           return reject(err)
         
