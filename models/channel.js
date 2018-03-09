@@ -21,13 +21,13 @@ const factory = channel => ({
     })
   },
   
-  getRandomUnsentTip: ({ filterTags = [] }) => {
+  getRandomUnsentTip: ({ tags = [] }) => {
     return new Promise((resolve, reject) => {
       const totalQuery = {}
       
-      const tags = filterTags.concat(getTags(channel))
-      if (tags.length)
-        totalQuery.tags = { $in: tags }
+      const filterTags = tags.concat(getTags(channel))
+      if (filterTags.length)
+        totalQuery.tags = { $in: filterTags }
       
       const remainingQuery = {
         ...totalQuery,
