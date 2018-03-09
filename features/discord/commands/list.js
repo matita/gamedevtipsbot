@@ -7,7 +7,7 @@ module.exports = (message, text) => {
   const count = countMatch ? Math.min(countMatch[1], maxCount) : 5
   
   tips.find({})
-    .sort({ createdAt: 1 })
+    .sort({ createdAt: -1 })
     .limit(count)
     .exec(async (err, foundTips) => {
       if (err)

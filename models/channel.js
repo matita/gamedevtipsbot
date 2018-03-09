@@ -76,12 +76,12 @@ const factory = channel => ({
   }
 })
 
-const getChannel = channelId => new Promise((resolve, reject) => {
+const getChannel = ({ serverId, channelId }) => new Promise((resolve, reject) => {
   channelsDb.findOne({ _id: channelId }).exec((err, channel) => {
     if (err) reject(err)
     else if (channel) resolve(factory(channel))
     else
-      channelsDb.insert({ _id: channelId, sentTipsIds: [], tags: [] }, (err, channel) => {
+      channelsDb.insert({ _id: channelId, serverId, sentTipsIds: [], tags: [] }, (err, channel) => {
         if (err) reject(err)
         else resolve(factory(channel))
       })
