@@ -22,8 +22,8 @@ const serverFactory = server => ({
   getChannel: (channelId) => getChannel({ serverId: server._id, channelId }),
     
   allChannels: () => new Promise((resolve, reject) => {
-    console.log('serverId', serverId)
-    channelsDb.find({ serverId: serverId }).exec((err, channels) => {
+    console.log('serverId', server._id)
+    channelsDb.find({ serverId: server._id }).exec((err, channels) => {
       if (err) reject(err)
       else resolve(channels.map(channelFactory))
     })
@@ -43,19 +43,18 @@ const serverFactory = server => ({
         if (err)
           return reject(err)
 
-        channels.forEach(async c => {
-          const channelId = c._id
-          if (!channelId)
-            return
+        channels
+          .map(channelFactory)
+          .forEach(channel => {
+            const discordChannel = client.channels.get(channel._id)
 
-          const channel = await getChannel({ channelId })
-          const discordChannel = client.channels.get(channelId)
+            if (!channel || !discordChannel)
+              return
 
-          if (!channel || !discordChannel)
-            return
-
-          randomTip({ channel, discordChannel })
-        })
+            randomTip({ channel, discordChannel })
+          })
+      
+      resolve()
       })
   })
   
