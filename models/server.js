@@ -21,6 +21,7 @@ const serverFactory = server => ({
   getChannel: (channelId) => getChannel({ serverId: server._id, channelId }),
     
   allChannels: () => new Promise((resolve, reject) => {
+    console.log('serverId', server._id)
     channelsDb.find({ serverId: server._id }).exec((err, channels) => {
       if (err) reject(err)
       else resolve(channels.map(channelFactory))

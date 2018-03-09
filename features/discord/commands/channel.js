@@ -12,9 +12,9 @@ module.exports = async (message, text, server) => {
       .filter(t => !!t)
 
     const channel = await server.getChannel(channelId)
-    await channel.setTags(tags)
+    const newChannel = await channel.setTags(tags)
     message.channel.send('I\'ll send tips' + 
-                         (tags.length ? ' with tags ' + tags.map(t => `*${t}*`).join(', ') : '') +
+                         (tags.length ? ' with tags ' + newChannel.tags.map(t => `*${t}*`).join(', ') : '') +
                          ` to <#${channelId}> every day`)
   } catch (err) {
     message.channel.send('```\n' + err + '\n```')

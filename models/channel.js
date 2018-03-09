@@ -11,15 +11,12 @@ const factory = channel => ({
   //sentTipsIds: channel.sentTipsIds || [],
   //tags: channel.tags || [],
   
-  setTags: (...tags) => {
-    return new Promise((resolve, reject) => {
-      channel.tags = tags
-      channelsDb.update({ _id: channel._id }, channel, (err, newChannel) => {
-        if (err) reject(err)
-        else resolve(factory(newChannel))
-      })
+  setTags: (...tags) => new Promise((resolve, reject) => {
+    channelsDb.update({ _id: channel._id }, { $set: { tags: tags } }, (err, newChannel) => {
+      if (err) reject(err)
+      else resolve(factory(newChannel))
     })
-  },
+  }),
   
   getRandomUnsentTip: ({ tags = [] }) => {
     return new Promise((resolve, reject) => {
@@ -77,7 +74,7 @@ const factory = channel => ({
 })
 
 const getChannel = ({ channelId, serverId }) => new Promise((resolve, reject) => {
-  channelsDb.findOne({ _id: channelId }).exec((err, channel) => {
+  channelsDb.findOne({ _id: channelId, serverId }).exec((err, channel) => {
     if (err) reject(err)
     else if (channel) resolve(factory(channel))
     else
