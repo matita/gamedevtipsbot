@@ -1,5 +1,6 @@
 // Pedro Medeiros - Pixelart
 
+const schedule = require('node-schedule')
 const patreon = require('../utils/api')
 const { saveTip } = require('../../../models/tips')
 const postToTip = require('../utils/postToTip')({ source: 'Pedro Medeiros', tags: ['art', 'pixelart'] })
@@ -47,9 +48,18 @@ const getAllPosts = async () => {
   }
 }
 
+const getLatestPosts = () => getPosts()
+  .then(parsePosts)
+
 
 const init = () => {
-  //getAllPosts()
+  schedule.scheduleJob('0 10 2 * * *', async () => {
+    try {
+      await getLatestPosts()
+    } catch (err) {
+      console.error('Error while getting latest Pedro Medeiros posts', err)
+    }
+  })
 }
 
 module.exports = init()
