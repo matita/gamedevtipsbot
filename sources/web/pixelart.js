@@ -27,8 +27,10 @@ const getTips = html => {
     
     if (currentTip) {
       const $img = $p.find('img').first()
-      if ($img.length)
+      if ($img.length) {
         currentTip.imageUrl = $img.attr('src')
+        currentTip = null
+      }
     }
   })
   
