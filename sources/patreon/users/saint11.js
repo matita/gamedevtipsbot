@@ -29,7 +29,7 @@ const getPosts = () => patreon.getPosts({
 
 
 const getAllPosts = async () => {
-  return
+  //return
   let iterator = getPosts
   let res
   let i = 0
@@ -37,11 +37,19 @@ const getAllPosts = async () => {
     do {
       console.log('getPosts', i++)
       res = await iterator().then(parsePosts)
+      console.log('posts.length', res.posts.length, res.posts.map(p => p.id))
       iterator = res.next
+      await delay(5000)()
     } while (res.posts.length)
+    console.log('took all posts')
   } catch (err) {
     console.error('error while getting all Saint11 posts', err)
   }
 }
 
-module.exports = getAllPosts()
+
+const init = () => {
+  
+}
+
+module.exports = init()
