@@ -2,6 +2,7 @@ const fs = require('fs')
 const path = require('path')
 const stripMention = require('./utils/stripMention')
 const init = require('./init')
+const { getServer } = require('../../models/server')
 
 const Discord = require('discord.js');
 const client = new Discord.Client();
@@ -28,7 +29,7 @@ fs.readdir(commandsDir, (err, files) => {
 })
 
 // do something when the bot receives a message
-client.on('message', function (message) {
+client.on('message', async function (message) {
   // ignore bot messages
   if (message.author.bot)
     return
@@ -41,12 +42,18 @@ client.on('message', function (message) {
   
   const textParts = text.split(/\s+/)
   const commandName = textParts.length && textParts[0].toLowerCase()
-  const command = commands[commandName]
+  const command = commands[commandName] || commands.default
   
-  if (command)
-    command(message, textParts.slice(1).join(' '))
-  else
-    message.reply('You said: ' + text);
+  try {
+    const server = await getServer(message.guild.id)
+
+    if (command)
+      command(message, textParts.slice(1).join(' '), server)
+    else
+      message.reply('You said: ' + text);
+  } catch (err) {
+    message.channel.send('```\n' + err.message + '\n```')
+  }
 });
 
 // make the bot log in
