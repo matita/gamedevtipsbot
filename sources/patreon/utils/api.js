@@ -20,14 +20,17 @@ const defaultParams = {
 }
 
 
+const parsePostsResponse = res => ({
+  data: res.data,
+  first: () => axios.get(res.data.links.first).then(parsePostsResponse),
+  next: () => axios.get(res.data.links.first).then(parsePostsResponse)
+})
+
 const getPosts = params =>
   axios.get(baseUrl, { params: { ...defaultParams, ...params } })
-    .then(res => ({
-      data: res.data,
-      next: 
-    })
+    .then(parsePostsResponse)
 
 
 module.exports = {
-  
+  getPosts
 }
