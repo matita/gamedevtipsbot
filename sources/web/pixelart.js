@@ -1,8 +1,13 @@
 // http://blog.studiominiboss.com/pixelart
 const axios = require('axios')
 const cheerio = require('cheerio')
-const addTip = ({ text, url, imageUrl }) => ({
-  
+const imageToTip = ({ text, url, imageUrl }) => ({
+  _id: 'web:pixelart:' + text.replace(/\s+/g, '-'),
+  source: 'pedro-medeiros',
+  text,
+  url,
+  imageUrl,
+  tags: ['art', 'pixelart']
 })
 
 const url = 'http://blog.studiominiboss.com/pixelart'
@@ -19,8 +24,10 @@ const getTips = html => {
     const $p = $(p)
     const text = $p.text().trim()
     if (text.match(/^#\s*\d+/)) {
+      const $a = $p.find('a').first()
       currentTip = {
-        text: $p.find('a').first().text().trim()
+        text: $a.text().trim(),
+        url: $a.attr('href')
       }
       tips.push(currentTip)
     }
