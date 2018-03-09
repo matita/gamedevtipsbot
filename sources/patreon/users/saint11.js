@@ -49,7 +49,7 @@ const getAllPosts = async () => {
 
 
 const init = () => {
-  
+  //getAllPosts()
 }
 
 module.exports = init()

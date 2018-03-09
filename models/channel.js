@@ -21,11 +21,11 @@ const factory = channel => ({
     })
   },
   
-  getRandomUnsentTip: () => {
+  getRandomUnsentTip: ({ filterTags = [] }) => {
     return new Promise((resolve, reject) => {
       const totalQuery = {}
       
-      const tags = getTags(channel)
+      const tags = filterTags.concat(getTags(channel))
       if (tags.length)
         totalQuery.tags = { $in: tags }
       
@@ -45,10 +45,11 @@ const factory = channel => ({
           const index = Math.floor(Math.random() * unsentTipsCount)
           const remaining = unsentTipsCount - 1
           
-          tipsDb.findOne(remainingQuery).exec((err, tip) => {
+          tipsDb.find(remainingQuery).skip(index).limit(1).exec((err, tips) => {
             if (err)
               return reject(err)
             
+            const tip = tips[0]
             resolve({ 
               tip, 
               remaining,
