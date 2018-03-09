@@ -38,7 +38,7 @@ const serverFactory = server => ({
     
   sendTips: (client) => new Promise((resolve, reject) => {
     channelsDb
-      .find({ serverId: server._id })
+      .find({ serverId: server._id, autotip: true })
       .exec((err, channels) => {
         if (err)
           return reject(err)

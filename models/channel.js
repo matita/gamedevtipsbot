@@ -12,7 +12,7 @@ const factory = channel => ({
   //tags: channel.tags || [],
   
   setTags: (tags) => new Promise((resolve, reject) => {
-    channelsDb.update({ _id: channel._id }, { $set: { tags: tags } }, {}, (err, numUpdated) => {
+    channelsDb.update({ _id: channel._id }, { $set: { tags: tags, autotip: true } }, {}, (err, numUpdated) => {
       channel.tags = tags
       if (err) reject(err)
       else resolve(factory(channel))
