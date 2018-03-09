@@ -2,7 +2,8 @@
 
 const axios = require('axios')
 const cheerio = require('cheerio')
-const htmlToMarkdown = require('html-to-markdown')
+const htmlToMarkdown = new require('turndown')()
+const { saveTip } = require('../../models/tips')
 
 const url = 'http://unitytip.com/'
 
@@ -15,14 +16,14 @@ const htmlToTips = html => {
       _id: 'unitytip:' + $d.attr('id'),
       source: 'Unity Tip',
       url: url + '#' + $d.attr('id'),
-      text: htmlToMarkdown.convert($d.find('p').html()),
+      text: htmlToMarkdown.turndown($d.find('p').html()),
       tags: ['unity']
     }))
 }
 
 const fetchPosts = () => axios.get(url)
   .then(res => htmlToTips(res.data))
-  .then(tips => console.log(tips.map((t, i) => i + '. ' + t.text)))
+  .then(tips => tips.forEach(saveTip))
 
 const init = () => {
   fetchPosts()
