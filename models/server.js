@@ -1,6 +1,7 @@
 const serversDb = require('./servers')
 const channelsDb = require('./channels')
 const { getChannel, channelFactory } = require('./channel')
+const randomTip = require('../features/discord/utils/randomTip')
 
 const serverFactory = server => ({
   ...server,
@@ -21,8 +22,8 @@ const serverFactory = server => ({
   getChannel: (channelId) => getChannel({ serverId: server._id, channelId }),
     
   allChannels: () => new Promise((resolve, reject) => {
-    console.log('serverId', server._id)
-    channelsDb.find({ serverId: server._id }).exec((err, channels) => {
+    console.log('serverId', serverId)
+    channelsDb.find({ serverId: serverId }).exec((err, channels) => {
       if (err) reject(err)
       else resolve(channels.map(channelFactory))
     })
@@ -33,6 +34,29 @@ const serverFactory = server => ({
       if (err) reject(err)
       else resolve(numRemoved)
     })
+  }),
+    
+  sendTips: (client) => new Promise((resolve, reject) => {
+    channelsDb
+      .find({ serverId: server._id })
+      .exec((err, channels) => {
+        if (err)
+          return reject(err)
+
+        channels.forEach(async c => {
+          const channelId = c._id
+          if (!channelId)
+            return
+
+          const channel = await getChannel({ channelId })
+          const discordChannel = client.channels.get(channelId)
+
+          if (!channel || !discordChannel)
+            return
+
+          randomTip({ channel, discordChannel })
+        })
+      })
   })
   
 })
@@ -52,5 +76,6 @@ const getServer = (guildId) => new Promise((resolve, reject) => {
 })
 
 module.exports = {
-  getServer
+  getServer,
+  serverFactory
 }
