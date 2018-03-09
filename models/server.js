@@ -26,6 +26,13 @@ const serverFactory = server => ({
       if (err) reject(err)
       else resolve(channels.map(channelFactory))
     })
+  }),
+    
+  removeChannels: channelsIds => new Promise((resolve, reject) => {
+    channelsDb.remove({ _id: { $in: channelsIds } }, { multi: true }, (err, numRemoved) => {
+      if (err) reject(err)
+      else resolve(numRemoved)
+    })
   })
   
 })
