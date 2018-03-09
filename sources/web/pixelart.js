@@ -47,5 +47,5 @@ const getTips = html => {
 const load = () => axios.get(url)
   .then(res => getTips(res.data))
 
-module.expors = load()
+module.expors = load/*()*/
 
