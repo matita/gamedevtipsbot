@@ -90,5 +90,6 @@ const getChannel = ({ channelId, serverId }) => new Promise((resolve, reject) =>
 
 
 module.exports = {
-  getChannel
+  getChannel,
+  channelFactory: factory
 }

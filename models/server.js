@@ -1,5 +1,6 @@
 const serversDb = require('./servers')
-const { getChannel } = require('./channel')
+const channelsDb = require('./channels')
+const { getChannel, channelFactory } = require('./channel')
 
 const serverFactory = server => ({
   ...server,
@@ -17,7 +18,14 @@ const serverFactory = server => ({
     })
   },
     
-  getChannel: (channelId) => getChannel({ serverId: server._id, channelId })
+  getChannel: (channelId) => getChannel({ serverId: server._id, channelId }),
+    
+  allChannels: () => new Promise((resolve, reject) => {
+    channelsDb.find({ serverId: server._id }).exec((err, channels) => {
+      if (err) reject(err)
+      else resolve(channels.map(channelFactory))
+    })
+  })
   
 })
 
