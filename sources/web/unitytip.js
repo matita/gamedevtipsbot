@@ -3,6 +3,8 @@
 const axios = require('axios')
 const cheerio = require('cheerio')
 const htmlToMarkdown = new require('turndown')()
+const schedule = require('node-schedule')
+
 const { saveTip } = require('../../models/tips')
 
 const url = 'http://unitytip.com/'
@@ -26,8 +28,10 @@ const fetchPosts = () => axios.get(url)
   .then(tips => tips.forEach(saveTip))
 
 const init = () => {
-  fetchPosts()
-    .catch(err => console.error('Error while fetching Unity Tip posts', err))
+  schedule.scheduleJob('0 3 * * *', () => {
+    fetchPosts()
+      .catch(err => console.error('Error while fetching Unity Tip posts', err))
+  })
 }
 
 module.exports = init()
