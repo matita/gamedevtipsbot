@@ -76,8 +76,8 @@ const factory = channel => ({
   }
 })
 
-const getChannel = ({ serverId, channelId }) => new Promise((resolve, reject) => {
-  channelsDb.findOne({ _id: channelId, serverId }).exec((err, channel) => {
+const getChannel = ({ channelId, serverId }) => new Promise((resolve, reject) => {
+  channelsDb.findOne({ _id: channelId }).exec((err, channel) => {
     if (err) reject(err)
     else if (channel) resolve(factory(channel))
     else
