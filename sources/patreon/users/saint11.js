@@ -3,6 +3,7 @@
 const patreon = require('../utils/api')
 const { saveTip } = require('../../../models/tips')
 const postToTip = require('../utils/postToTip')({ source: 'Pedro Medeiros', tags: ['art', 'pixelart'] })
+const delay = (ms) => () => new Promise((resolve, reject) => setTimeout(()=> resolve(), ms))
 
 
 const parsePosts = res => {
@@ -20,22 +21,27 @@ const parsePosts = res => {
 }
 
 
-const getPosts = () => {
-  patreon.getPosts({
+const getPosts = () => patreon.getPosts({
     'filter[creator_id]': '2279992',
     'filter[user_defined_tags]': 'tutorial',
     'filter[contains_exclusive_posts]': true
-  }).then(parsePosts)
-}
+  })
 
 
 const getAllPosts = async () => {
+  return
   let iterator = getPosts
   let res
-  do {
-    res = await iterator()
-    iterator = res.next
-  } while (res.posts.length)
+  let i = 0
+  try {
+    do {
+      console.log('getPosts', i++)
+      res = await iterator().then(parsePosts)
+      iterator = res.next
+    } while (res.posts.length)
+  } catch (err) {
+    console.error('error while getting all Saint11 posts', err)
+  }
 }
 
-module.exports = getPosts()
+module.exports = getAllPosts()

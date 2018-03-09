@@ -11,19 +11,14 @@ const defaultParams = {
   'filter[is_by_creator]': true,
   'filter[is_following]': false,
   'json-api-use-default-includes': false,
-  'json-api-version': '1.0',
-  
-  'filter[creator_id]': '2279992',
-  'filter[user_defined_tags]': 'tutorial',
-  'filter[contains_exclusive_posts]': true,
-  'page[cursor]': '2017-07-25T13%3A00%3A00Z',
+  'json-api-version': '1.0'
 }
 
 
 const parsePostsResponse = res => ({
   data: res.data,
-  first: () => axios.get(res.data.links.first).then(parsePostsResponse),
-  next: () => axios.get(res.data.links.first).then(parsePostsResponse)
+  first: () => axios.get('https://' + res.data.links.first).then(parsePostsResponse),
+  next: () => axios.get('https://' + res.data.links.first).then(parsePostsResponse)
 })
 
 const getPosts = params =>
