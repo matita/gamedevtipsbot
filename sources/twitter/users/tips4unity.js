@@ -1,9 +1,7 @@
 const tweetToTip = require('../utils/tweetToTip')({ source: 'tips4unity', tags: ['unity'] })
-const tips = require('../../../models/tips')
+const { saveTip } = require('../../../models/tips')
 
 const userId = '2490064238'
-
-const saveTip = tips.saveTip
 
 const init = twit => {
   console.log('Retrieveing tweets for ' + userId, __filename)
