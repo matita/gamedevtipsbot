@@ -13,6 +13,7 @@ module.exports = async (message, text, server) => {
 
     const channel = await server.getChannel(channelId)
     const newChannel = await channel.setTags(tags)
+    console.log('newChannel', newChannel)
     message.channel.send('I\'ll send tips' + 
                          (tags.length ? ' with tags ' + newChannel.tags.map(t => `*${t}*`).join(', ') : '') +
                          ` to <#${channelId}> every day`)

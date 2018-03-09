@@ -11,10 +11,11 @@ const factory = channel => ({
   //sentTipsIds: channel.sentTipsIds || [],
   //tags: channel.tags || [],
   
-  setTags: (...tags) => new Promise((resolve, reject) => {
-    channelsDb.update({ _id: channel._id }, { $set: { tags: tags } }, (err, newChannel) => {
+  setTags: (tags) => new Promise((resolve, reject) => {
+    channelsDb.update({ _id: channel._id }, { $set: { tags: tags } }, {}, (err, numUpdated) => {
+      channel.tags = tags
       if (err) reject(err)
-      else resolve(factory(newChannel))
+      else resolve(factory(channel))
     })
   }),
   
@@ -78,9 +79,10 @@ const getChannel = ({ channelId, serverId }) => new Promise((resolve, reject) =>
     if (err) reject(err)
     else if (channel) resolve(factory(channel))
     else
-      channelsDb.update({ _id: channelId}, { _id: channelId, serverId, sentTipsIds: [], tags: [] }, { upsert: true }, (err, channel) => {
+      channelsDb.update({ _id: channelId}, { _id: channelId, serverId, sentTipsIds: [], tags: [] }, { upsert: true }, (err, numUpdated) => {
         if (err) reject(err)
-        else resolve(factory(channel))
+        else getChannel({ channelId, serverId })
+          .then(channel => resolve(channel))
       })
   })
 })
