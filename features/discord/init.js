@@ -17,7 +17,7 @@ const sendTips = (client) => {
         if (!channelId)
           return
         
-        const channel = await getChannel(channelId)
+        const channel = await getChannel({ channelId, serverId: s._id })
         const discordChannel = client.channels.get(channelId)
         
         if (!channel || !discordChannel)

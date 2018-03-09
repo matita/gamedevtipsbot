@@ -8,7 +8,7 @@ module.exports = async (message, text) => {
   const discordChannel = message.channel
   
   try {
-    const channel = await getChannel(discordChannel.id)
+    const channel = await getChannel({ channelId: discordChannel.id })
     randomTip({ channel, discordChannel, tags })
   } catch (err) {
     discordChannel.send('```\n' + err.message + '\n```')

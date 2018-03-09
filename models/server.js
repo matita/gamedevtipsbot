@@ -1,4 +1,5 @@
 const serversDb = require('./servers')
+const { getChannel } = require('./channel')
 
 const serverFactory = server => ({
   ...server,
@@ -14,7 +15,9 @@ const serverFactory = server => ({
         resolve(serverFactory(server))
       })
     })
-  }
+  },
+    
+  getChannel: (channelId) => getChannel({ serverId: server._id, channelId })
   
 })
 
