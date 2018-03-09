@@ -13,7 +13,7 @@ const factory = channel => ({
   
   setTags: (...tags) => {
     return new Promise((resolve, reject) => {
-      channel.tags = getTags(channel).concat(tags)
+      channel.tags = tags
       channelsDb.update({ _id: channel._id }, channel, (err, newChannel) => {
         if (err) reject(err)
         else resolve(factory(newChannel))
