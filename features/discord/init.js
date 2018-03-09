@@ -26,6 +26,8 @@ const sendTips = (client) => {
           
         randomTip({ channel, discordChannel })
       })
+    
+      
     })
 }
 
