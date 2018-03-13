@@ -1,12 +1,13 @@
 const { getServer } = require('../../../models/server')
 const extractChannels = require('../utils/extractChannels')
+const titleCase = require('../../../utils/titleCase')
 
 const requiredPermission = 'MANAGE_CHANNELS'
 
 module.exports = async (message, text, server) => {
   try {
     if (!message.member.hasPermission(requiredPermission))
-      return message.reply('who do you think you are? Do you have `' + requiredPermission + '` permission? I don\'t think so')
+      return message.reply('who do you think you are? Do you have `' + titleCase(requiredPermission) + '` permission? I don\'t think so')
     
     const { newText, channelsIds } = extractChannels(text)
     const channelId = channelsIds[0]
