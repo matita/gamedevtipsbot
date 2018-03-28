@@ -62,4 +62,8 @@ const init = () => {
   })
 }
 
-module.exports = init()
+module.exports = {
+  dummy: init(),
+  getLatestPosts,
+  getAllPosts
+}
