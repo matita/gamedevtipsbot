@@ -9,3 +9,4 @@ require('./sources/web/unitytip')
 
 // fix db images not in cdn
 require('./exec/upload-cdn')
+require('./exec/fix-saint11-images')
