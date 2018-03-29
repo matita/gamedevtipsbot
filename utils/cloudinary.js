@@ -6,7 +6,7 @@ cloudinary.config({
 })
 
 module.exports = {
-    isInCdn: url => false,
+    isInCdn: url => url && url.toLowerCase().indexOf('cloudinary') != -1,
     upload: image => new Promise((resolve, reject) => {
         cloudinary.v2.uploader.upload(image, (err, res) => {
             if (err)
