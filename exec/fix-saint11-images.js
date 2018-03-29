@@ -13,7 +13,7 @@ tips.find({ source: 'Pedro Medeiros' }, (err, foundTips) => {
 
     console.log('found', tipsToFix.length, 'tips to fix')
     const tipsIdsToFix = tipsToFix.map(t => t._id)
-    tips.remove({ _id: { $in: tipsIdsToFix }}, (err, numRemoved) => {
+    tips.remove({ _id: { $in: tipsIdsToFix }}, { multi: true }, (err, numRemoved) => {
         console.log('removed', numRemoved, 'tips')
 
         try {
