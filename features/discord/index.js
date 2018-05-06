@@ -3,6 +3,8 @@ const path = require('path')
 const stripMention = require('./utils/stripMention')
 const init = require('./init')
 const { getServer } = require('../../models/server')
+const autoFetchReactionEvents = require('./utils/autoFetchReactionsEvents')
+const { listenForArrowReactions } = require('./commands/search')
 
 const Discord = require('discord.js');
 const client = new Discord.Client();
@@ -14,6 +16,9 @@ client.on('ready', function () {
   console.log('Beep boop');
   init(client)
 });
+
+autoFetchReactionEvents(client)
+listenForArrowReactions(client)
 
 // retrieve available commands
 const commands = {}
@@ -48,9 +53,9 @@ client.on('message', async function (message) {
     const server = await getServer(message.guild.id)
 
     if (command)
-      command(message, textParts.slice(1).join(' '), server)
+      await command(message, textParts.slice(1).join(' '), server)
     else
-      message.reply('You said: ' + text);
+      await message.reply('You said: ' + text);
   } catch (err) {
     message.channel.send('```\n' + err.message + '\n```')
   }

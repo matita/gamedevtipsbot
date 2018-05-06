@@ -1,5 +1,6 @@
 const cdn = require('../utils/cloudinary')
 const Datastore = require('nedb')
+
 const tips = new Datastore({ 
   filename: '.data/tips.db', 
   timestampData: true,
@@ -36,4 +37,34 @@ const saveTip = t => {
 
 tips.saveTip = saveTip
 
+/** 
+ * @param {string} query 
+ * @return {Promise.<Tip>}
+ */
+tips.search = query => new Promise((resolve, reject) => {
+  tips.find({}, (err, items) => {
+    if (err)
+      return reject(err)
+
+    const terms = query.toLowerCase().split(/\s+/)
+    const matchingItems = items.filter(tip => {
+      return terms.every(term => {
+        return tip.tags.map(t => t.toLowerCase()).indexOf(term) !== -1 ||
+          tip.text.toLowerCase().indexOf(term) !== -1
+      })
+    })
+    resolve(matchingItems)
+  })
+})
+
+
+
 module.exports = tips
+
+
+/**
+ * @typedef {Object} Tip
+ * @property {string} text
+ * @property {string} source
+ * @property {Array.<string>} tags
+ */
