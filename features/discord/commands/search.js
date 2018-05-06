@@ -25,7 +25,7 @@ async function search(message, text, server) {
     return reply
 }
 
-search.listenForArrowReactions = client => client.on('messageReactionAdd', onReaction)
+search.listenForArrowReactions = client => client.on('messageReactionAdd', onReaction.bind(null, client))
 
 module.exports = search
 
@@ -65,11 +65,20 @@ async function getSearchResult(text, index = 0) {
 
 
 /** 
+ * @param {Discord.Client} client
  * @param {Discord.MessageReaction} reaction
  * @param {Discord.User} user
  */
-async function onReaction(reaction, user) {
+async function onReaction(client, reaction, user) {
+    // ignore bot interactions
+    if (user.bot)
+        return
+
     const { message } = reaction
+    // ignore messages not sent by the bot
+    if (message.author.id !== client.user.id)
+        return
+        
     const embed = message.embeds && message.embeds[0]
     if (!embed)
         return
