@@ -1,3 +1,4 @@
+const Discord = require('discord.js')
 const serversDb = require('./servers')
 const channelsDb = require('./channels')
 const { getChannel, channelFactory } = require('./channel')
@@ -36,6 +37,7 @@ const serverFactory = server => ({
     })
   }),
     
+  /** @param {Discord.Client} client */
   sendTips: (client) => new Promise((resolve, reject) => {
     channelsDb
       .find({ serverId: server._id, autotip: true })
@@ -43,11 +45,14 @@ const serverFactory = server => ({
         if (err)
           return reject(err)
 
+        console.log('found channels for server', server._id, channels.length)
+
         channels
           .map(channelFactory)
           .forEach(channel => {
+            /** @type {Discord.TextChannel} */
             const discordChannel = client.channels.get(channel._id)
-
+            console.log('channel for tips:', discordChannel && discordChannel.name)
             if (!channel || !discordChannel)
               return
 
